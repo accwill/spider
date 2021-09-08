@@ -22,6 +22,16 @@ class Scrappy {
   constructor(params: ContructorParams) {
     this.params = params
   }
+
+  /**
+   * asdfasdf
+   * @param {number} a str
+   * @param  {number} b str
+   * @return {number}
+   */
+  sum(a: number, b: number) {
+    return a + b
+  }
 }
 
 export default Scrappy

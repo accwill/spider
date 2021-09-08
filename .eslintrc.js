@@ -5,6 +5,7 @@ module.exports = {
   },
   extends: [
     'google',
+    'plugin:jest/recommended',
     'plugin:prettier/recommended' // 添加 prettier 插件
   ],
   parser: '@typescript-eslint/parser',

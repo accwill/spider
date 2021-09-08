@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
-      "module": "commonjs",
-      "target": "es5",
-      "noImplicitAny": true,
-      "outDir": "./dist",
-      "sourceMap": true,
-      "noEmit": true 
+    "types": ["jest"],
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "lib/*"
+      ]
+    },
+    "noEmit": true
   },
-  "include": [
-      "lib/**/*"
-  ]
+  "include": ["lib/**/*", "tests/**/*"]
 }
