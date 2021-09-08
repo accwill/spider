@@ -1,16 +1,25 @@
-import ask from './utils/request'
+// import ask from './utils/request';
 
-type i_ContructorParams = {
+/**
+ * asldfj
+ */
+type ContructorParams = {
   url: string
   callback: (response: any) => void
 }
 
-
+/**
+ * 爬虫类
+ */
 class Scrappy {
   maxConnection: number = 1
   maxPage: number = 1
-  params: i_ContructorParams
-  constructor(params: i_ContructorParams) {
+  params: ContructorParams
+  /**
+   * 构造函数
+   * @param {ContructorParams} params
+   */
+  constructor(params: ContructorParams) {
     this.params = params
   }
 }
