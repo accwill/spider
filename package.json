@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "repository": "https://github.com/accwill/spider.git",
+  "keywords": ["spider"],
   "author": "",
   "license": "ISC",
   "dependencies": {
