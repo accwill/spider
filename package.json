@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "cov": "jest --coverage && coveralls < coverage/lcov.info",
     "prepare": "husky install"
   },
   "repository": "https://github.com/accwill/spider.git",
@@ -24,6 +25,7 @@
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
     "commitizen": "^4.2.4",
+    "coveralls": "^3.1.1",
     "cz-conventional-changelog": "^3.2.0",
     "cz-customizable": "^6.3.0",
     "eslint": "^7.32.0",
