@@ -12,7 +12,7 @@ type ContructorParams = {
  * 爬虫类
  */
 class Scrappy {
-  maxConnection: number = 1
+  maxConnection: number = 2
   maxPage: number = 1
   params: ContructorParams
   /**
