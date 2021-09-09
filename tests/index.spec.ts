@@ -1,6 +1,6 @@
-import Scrappy from '../lib/index'
+import Scrappy from '@/index'
 
-test('main.ts', () => {
+test('测试 main.ts', () => {
   const s = new Scrappy({} as any)
   expect(s.sum(1, 2)).toBe(3)
 })
