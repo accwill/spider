@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "cov": "jest --coverage && coveralls < coverage/lcov.info",
+    "tsc": "tsc ",
     "prepare": "husky install"
   },
   "repository": "https://github.com/accwill/spider.git",
@@ -15,13 +16,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.4"
+    "axios": "^0.21.4",
+    "random-useragent": "^0.5.0"
   },
   "lint-staged": {
     "*.ts": "eslint --fix"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
+    "@types/random-useragent": "^0.3.0",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
     "commitizen": "^4.2.4",

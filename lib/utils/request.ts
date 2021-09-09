@@ -1,15 +1,19 @@
 import axios from 'axios'
+import * as randomAgent from 'random-useragent'
 
-
-
-const ask = axios.create({
-  baseURL: 'https://some-domain.com/api/',
-  timeout: 6000,
+const request = axios.create({
+  timeout: 100,
   transitional: {
     forcedJSONParsing: true,
     silentJSONParsing: false,
     clarifyTimeoutError: false
   }
-});
+})
 
-export default ask
+/**
+ * 获取随机user-agent
+ * @return {any}
+ */
+export const getUserAgent = () => ({ 'User-Agent': randomAgent.getRandom() })
+
+export default request
