@@ -2,7 +2,7 @@
   "compilerOptions": {
     "types": ["jest"],
     "module": "commonjs",
-    "target": "es5",
+    "target": "esnext",
     "noImplicitAny": true,
     "outDir": "./dist",
     "sourceMap": true,
@@ -12,7 +12,6 @@
         "lib/*"
       ]
     },
-    "noEmit": true
   },
-  "include": ["lib/**/*", "tests/**/*"]
+  "include": ["lib/**/*"]
 }
