@@ -1,5 +1,5 @@
 import { ReconnectCount, ReconnectionTime, Status } from '../constants'
-import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { wait } from './helper'
 import request, { getUserAgent } from './request'
 
@@ -88,7 +88,7 @@ export class Ask {
    */
   constructor(params: Params) {
     this.config = { ...params }
-    this._reconnectCount = this.config.reconnectCount ?? this._reconnectCount
+    this._reconnectCount = this.config.reconnectCount || this._reconnectCount
   }
   /**
    * 请求
