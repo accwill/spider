@@ -88,7 +88,7 @@ export class Ask {
    */
   constructor(params: Params) {
     this.config = { ...params }
-    this._reconnectCount = this.config.reconnectCount || this._reconnectCount
+    this._reconnectCount = this.config.reconnectCount ?? this._reconnectCount
   }
   /**
    * 请求
