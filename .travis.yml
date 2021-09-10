@@ -1,7 +1,7 @@
 language: node_js  # 设置语言
 
 node_js:
-  - 12 # 指定node.js版本
+  - 14.17.0 # 指定node.js版本
 
 cache: yarn # 开启缓存
 
