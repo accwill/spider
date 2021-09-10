@@ -1,4 +1,4 @@
-import { ReconnectionTime, Status } from '../constants'
+import { ReconnectCount, ReconnectionTime, Status } from '../constants'
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { wait } from './helper'
 import request, { getUserAgent } from './request'
@@ -26,7 +26,7 @@ type Params = {
   /** 请求url */
   url: string
   /** 失败重试次数 */
-  reconnectionCount?: number
+  reconnectCount?: number
   /** 类型 */
   type?: Type
   onError?: (error: Error, config: Params) => void
@@ -35,7 +35,7 @@ type Params = {
 /**
  * 请求类
  * 1. 错误重连，可设置次数
- * 2. TODO: 请求解析中间件设置
+ * 2. TODO: 请求解析中间件设置, Cancel方法
  */
 export class Ask {
   /**
@@ -43,22 +43,41 @@ export class Ask {
    * @readonly
    */
   get state() {
+    const self = this
     return {
-      requestCount: this.requestCount,
+      get requestCount() {
+        return self.requestCount
+      },
+      get reconnectCount() {
+        return self.reconnectCount
+      },
       url: this.config.url,
-      response: this.response,
-      status: this.status
+      get response() {
+        return self.response
+      },
+      get status() {
+        return self.status
+      }
     }
   }
+  resCtx: Promise<AxiosResponse<any>>
   /** 请求状态 */
-  status: Status = Status.Normal
+  _status: Status = Status.Normal
+  /** 请求状态 */
+  get status() {
+    return this._status
+  }
   /** 结果 */
-  response: AxiosResponse<any>
+  response: AxiosResponse<any> = null
+  _reconnectCount = ReconnectCount
+  /** 失败重连次数 */
+  get reconnectCount() {
+    return this._reconnectCount
+  }
   /**
    * @private
    */
   _requestCount = 0
-
   /** 请求总次数 */
   get requestCount() {
     return this._requestCount
@@ -67,15 +86,16 @@ export class Ask {
   /**
    * @param  {Params} params
    */
-  constructor(params: Params = {} as any) {
-    this.config = params
+  constructor(params: Params) {
+    this.config = { ...params }
+    this._reconnectCount = this.config.reconnectCount ?? this._reconnectCount
   }
   /**
    * 请求
    * @param {number} time 请求次数
-   * @return {AxiosPromise<any>}
+   * @return {AxiosResponse<any>}
    */
-  async start(time: number = 0): Promise<AxiosPromise<any>> {
+  async _start(time: number = 0): Promise<AxiosResponse<any>> {
     const { url, type, ...rest } = this.config
     let mapConfig = {}
     if (type in Type) {
@@ -83,26 +103,37 @@ export class Ask {
     }
     try {
       this._requestCount += 1
-      this.status = Status.Loading
+      this._status = Status.Loading
       const response = await request({
         url: encodeURI(url),
         headers: getUserAgent(),
         ...mapConfig,
         ...rest
       })
-      this.status = Status.Success
+      this._status = Status.Success
       this.response = response
       return response
     } catch (error) {
       if (this.isExceed(time)) {
         this.config.onError?.(error, this.config)
-        this.status = Status.Error
+        this._status = Status.Error
         return null
       }
       await wait(ReconnectionTime)
       time += 1
-      return this.start(time)
+      return this._start(time)
     }
+  }
+
+  /**
+   * 请求
+   * @param {number} time 请求次数
+   * @return {AxiosResponse<any>}
+   */
+  async start(time: number = 0): Promise<AxiosResponse<any>> {
+    const res = this._start(time)
+    this.resCtx = res
+    return this.resCtx
   }
   /**
    * 是否超过重连次数限制
@@ -111,10 +142,7 @@ export class Ask {
    * @return {boolean}
    */
   isExceed(time: number) {
-    if (!Reflect.has(this.config, 'reconnectionCount')) {
-      return false
-    }
-    return time >= this.config.reconnectionCount
+    return time >= this.reconnectCount
   }
 }
 
@@ -123,11 +151,12 @@ export class Ask {
  *
  * @param {string} url
  * @param {(Omit<Params, 'url'> | string)} params 参数
- * @return {Promise<AxiosPromise<any>>}
+ * @return {Ask}
  */
 const ask = (url: string, params?: Omit<Params, 'url'>) => {
   const res = new Ask({ ...(params || {}), url })
-  return res.start()
+  res.start()
+  return res
 }
 
 export default ask
