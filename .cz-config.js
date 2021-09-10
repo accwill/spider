@@ -17,10 +17,15 @@ module.exports = {
   // scope 类型（定义之后，可通过上下键选择）
   // 如果选择 custom，后面会让你再输入一个自定义的 scope。也可以不设置此项，把后面的 allowCustomScopes 设置为 true
   scopes: [
-    ['middlware', '中间件相关'],
+    ['downloader', '下载器'],
+    ['spider', '分析器'],
+    ['schedule', '调度器'],
+    ['engine', '核心引擎'],
+    ['pipelines', '存储管道'],
+    ['middleware', '中间件相关'],
     ['connection', '连接池相关'],
     ['deps', '项目依赖'],
-    ['auth', '对 auth 修改'],
+    ['ask', '请求类封装'],
     ['other', '其他修改'],
     ['custom', '以上都不是？我要自定义']
   ].map(([value, description]) => {

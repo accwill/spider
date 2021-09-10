@@ -1,4 +1,4 @@
-import { DataType } from '@/constants'
+import { DataType } from '../constants'
 
 /**
  * 判断一个参数是否为字符串
