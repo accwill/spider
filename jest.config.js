@@ -3,6 +3,7 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js'],
   testEnvironment: 'node',
   preset: 'ts-jest',
+  testTimeout: 60 * 1000,
   transform: {
     '^.+\\.ts$': 'ts-jest' // ts 文件用 ts-jest 转换
   },

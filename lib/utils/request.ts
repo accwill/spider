@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as randomAgent from 'random-useragent'
 
 const request = axios.create({
-  timeout: 100,
+  timeout: 6000,
   transitional: {
     forcedJSONParsing: true,
     silentJSONParsing: false,

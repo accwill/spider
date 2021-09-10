@@ -12,6 +12,7 @@
         "lib/*"
       ]
     },
+    "resolveJsonModule": true
   },
-  "include": ["lib/**/*"]
+  "include": ["lib/**/*", "tests/**/*"]
 }
