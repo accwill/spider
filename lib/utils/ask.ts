@@ -1,5 +1,5 @@
-import { ReconnectCount, ReconnectionTime, Status } from '../constants'
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import { ReconnectCount, ReconnectionTime, Status } from '../constants'
 import { wait } from './helper'
 import request, { getUserAgent } from './request'
 
@@ -35,7 +35,7 @@ type Params = {
 /**
  * 请求类
  * 1. 错误重连，可设置次数
- * 2. TODO: 请求解析中间件设置
+ * 2. TODO: 请求解析中间件设置, Cancel方法
  */
 export class Ask {
   /**
@@ -62,7 +62,9 @@ export class Ask {
   }
   resCtx: Promise<AxiosResponse<any>>
   /** 请求状态 */
-  status: Status = Status.Normal
+  get status() {
+    return this._status
+  }
   /** 结果 */
   response: AxiosResponse<any> = null
   /** 可以失败重连的次数 */
@@ -101,7 +103,7 @@ export class Ask {
         ...rest,
         cancelToken: this._cancelToken.token
       })
-      this.status = Status.Success
+      this._status = Status.Success
       this.response = response
       return response
     } catch (error) {
