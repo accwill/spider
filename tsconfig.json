@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
     "types": ["jest"],
-    "module": "commonjs",
+    "module": "esnext",
     "target": "esnext",
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "outDir": "./dist",
     "sourceMap": true,
     "baseUrl": "./",
+    "esModuleInterop": true,
     "paths": {
       "@/*": [
         "lib/*"
       ]
-    },
-    "resolveJsonModule": true
+    }
   },
   "include": ["lib/**/*", "tests/**/*"]
 }

@@ -2,11 +2,14 @@
   "name": "node-scrappy",
   "version": "1.0.0",
   "description": "good spider",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "type": "module",
   "scripts": {
-    "test": "jest",
-    "cov": "jest --coverage && coveralls < coverage/lcov.info",
-    "tsc": "tsc ",
+    "test": "cross-env NODE_OPTIONS='--experimental-modules --es-module-specifier-resolution=node' jest",
+    "start": "node --experimental-modules --es-module-specifier-resolution=node dist/lib/index.js",
+    "cov": "cross-env NODE_OPTIONS='--experimental-modules --es-module-specifier-resolution=node' jest --coverage && coveralls < coverage/lcov.info",
+    "tsc": "tsc",
+    "commit": "node --experimental-modules --es-module-specifier-resolution=node ./node_modules/.bin/cz",
     "prepare": "husky install"
   },
   "repository": "https://github.com/accwill/spider.git",
@@ -29,6 +32,7 @@
     "@typescript-eslint/parser": "^4.31.0",
     "commitizen": "^4.2.4",
     "coveralls": "^3.1.1",
+    "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.2.0",
     "cz-customizable": "^6.3.0",
     "eslint": "^7.32.0",
@@ -46,6 +50,9 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "./.cz-config.cjs"
     }
   }
 }

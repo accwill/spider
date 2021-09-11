@@ -17,5 +17,7 @@ export enum Status {
   /** 加载失败 */
   Error = 'Error',
   /** 正常 */
-  Normal = 'Normal'
+  Normal = 'Normal',
+  /** 取消 */
+  Cancel = 'Cancel'
 }

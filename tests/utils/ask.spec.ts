@@ -35,3 +35,10 @@ it('ask测试，ask状态', async () => {
   expect(askState.status).toBe(Status.Success)
   expect(isString(askState.response.data)).toBe(true)
 })
+
+it('ask测试, 取消请求', async () => {
+  const instance = ask('http://www.baidu.com')
+  instance.cancel()
+  await instance.resCtx
+  expect(instance.state.status).toBe(Status.Cancel)
+})
