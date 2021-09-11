@@ -62,9 +62,7 @@ export class Ask {
   }
   resCtx: Promise<AxiosResponse<any>>
   /** 请求状态 */
-  get status() {
-    return this._status
-  }
+  status: Status = Status.Normal
   /** 结果 */
   response: AxiosResponse<any> = null
   /** 可以失败重连的次数 */
@@ -103,7 +101,7 @@ export class Ask {
         ...rest,
         cancelToken: this._cancelToken.token
       })
-      this._status = Status.Success
+      this.status = Status.Success
       this.response = response
       return response
     } catch (error) {
