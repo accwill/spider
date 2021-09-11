@@ -2,7 +2,7 @@
   "name": "node-scrappy",
   "version": "1.0.0",
   "description": "good spider",
-  "main": "index.js",
+  "main": "lib/index.js",
   "type": "module",
   "scripts": {
     "test": "cross-env NODE_OPTIONS='--experimental-modules --es-module-specifier-resolution=node' jest",
@@ -50,6 +50,9 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "./.cz-config.cjs"
     }
   }
 }

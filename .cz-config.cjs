@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   // type 类型（定义之后，可通过上下键选择）
   types: [
     { value: 'feat', name: 'feat:     新增功能' },
