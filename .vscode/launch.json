@@ -11,6 +11,8 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
+      // 参数传递
+      "runtimeArgs": ["--experimental-modules", "--es-module-specifier-resolution=node"],
       "program": "${workspaceFolder}/dist/lib/index.js",
     }
   ]

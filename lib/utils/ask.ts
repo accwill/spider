@@ -1,5 +1,5 @@
 import { ReconnectCount, ReconnectionTime, Status } from '../constants'
-import { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { wait } from './helper'
 import request, { getUserAgent } from './request'
 
@@ -35,7 +35,7 @@ type Params = {
 /**
  * 请求类
  * 1. 错误重连，可设置次数
- * 2. TODO: 请求解析中间件设置, Cancel方法
+ * 2. TODO: 请求解析中间件设置
  */
 export class Ask {
   /**
@@ -62,33 +62,23 @@ export class Ask {
   }
   resCtx: Promise<AxiosResponse<any>>
   /** 请求状态 */
-  _status: Status = Status.Normal
-  /** 请求状态 */
-  get status() {
-    return this._status
-  }
+  status: Status = Status.Normal
   /** 结果 */
   response: AxiosResponse<any> = null
-  _reconnectCount = ReconnectCount
-  /** 失败重连次数 */
-  get reconnectCount() {
-    return this._reconnectCount
-  }
-  /**
-   * @private
-   */
-  _requestCount = 0
-  /** 请求总次数 */
-  get requestCount() {
-    return this._requestCount
-  }
+  /** 可以失败重连的次数 */
+  reconnectCount = ReconnectCount
+  /** 请求次数 */
+  requestCount = 0
+  /** 错误对象 */
+  error: Error = null
+  _cancelToken = axios.CancelToken.source()
   config: Params | null = null
   /**
    * @param  {Params} params
    */
   constructor(params: Params) {
     this.config = { ...params }
-    this._reconnectCount = this.config.reconnectCount ?? this._reconnectCount
+    this.reconnectCount = this.config.reconnectCount ?? this.reconnectCount
   }
   /**
    * 请求
@@ -102,24 +92,29 @@ export class Ask {
       mapConfig = mapTypeConfig[type]
     }
     try {
-      this._requestCount += 1
-      this._status = Status.Loading
+      this.requestCount += 1
+      this.status = Status.Loading
       const response = await request({
         url: encodeURI(url),
         headers: getUserAgent(),
         ...mapConfig,
-        ...rest
+        ...rest,
+        cancelToken: this._cancelToken.token
       })
-      this._status = Status.Success
+      this.status = Status.Success
       this.response = response
       return response
     } catch (error) {
-      if (this.isExceed(time)) {
+      if (this.isExceed(time) && this.status !== Status.Cancel) {
         this.config.onError?.(error, this.config)
-        this._status = Status.Error
+        this.status = Status.Error
+        this.error = error
         return null
       }
       await wait(ReconnectionTime)
+      if (this.status === Status.Cancel) {
+        return
+      }
       time += 1
       return this._start(time)
     }
@@ -143,6 +138,12 @@ export class Ask {
    */
   isExceed(time: number) {
     return time >= this.reconnectCount
+  }
+
+  /** 取消请求 */
+  cancel() {
+    this.status = Status.Cancel
+    this._cancelToken.cancel()
   }
 }
 

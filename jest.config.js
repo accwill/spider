@@ -1,12 +1,13 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-module.exports = {
+export default {
   moduleFileExtensions: ['ts', 'js'],
   testEnvironment: 'node',
   preset: 'ts-jest',
   testTimeout: 60 * 1000,
-  transform: {
-    '^.+\\.ts$': 'ts-jest' // ts 文件用 ts-jest 转换
-  },
+  // transform: {
+  //   '^.+\\.ts$': 'ts-jest' // ts 文件用 ts-jest 转换
+  // },
+  transform: {},
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/lib/$1'
   },
