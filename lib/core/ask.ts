@@ -3,12 +3,12 @@
  * @Author: aceh
  * @Date: 2021-09-11 20:10:33
  * @Last Modified by: aceh
- * @Last Modified time: 2021-09-12 10:10:00
+ * @Last Modified time: 2021-09-12 18:59:39
  */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ReconnectCount, ReconnectionTime, Status } from '../constants'
-import { wait } from './helper'
-import request, { getUserAgent } from './request'
+import { wait } from '../utils/helper'
+import request, { getUserAgent } from '../utils/request'
 
 /** 请求类型 */
 export enum Type {
@@ -24,7 +24,9 @@ const mapTypeConfig = {
   [Type.File]: {
     responseType: 'stream'
   },
-  [Type.Text]: {},
+  [Type.Text]: {
+    responseType: 'text/html; charset=utf-8'
+  },
   [Type.JSON]: {
     responseType: 'json'
   }
@@ -36,6 +38,10 @@ export type Params = {
   reconnectCount?: number
   /** 类型 */
   type?: Type
+  /** 爬虫名字 */
+  spiderName?: string
+  /** 优先权, 默认为1， 值越大，越有限 */
+  priority?: number
   onError?: (error: Error, config: Params) => void
 } & AxiosRequestConfig
 
@@ -99,11 +105,14 @@ export class Ask {
     if (type in Type) {
       mapConfig = mapTypeConfig[type]
     }
+    if (!mapConfig) {
+      mapConfig = mapTypeConfig[Type.Text]
+    }
     try {
       this.requestCount += 1
       this.status = Status.Loading
       const response = await request({
-        url: encodeURI(url),
+        url: url,
         headers: getUserAgent(),
         ...mapConfig,
         ...rest,

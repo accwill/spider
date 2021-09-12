@@ -2,17 +2,13 @@
  * @Author: aceh
  * @Date: 2021-09-11 20:35:21
  * @Last Modified by: aceh
- * @Last Modified time: 2021-09-12 09:50:35
+ * @Last Modified time: 2021-09-12 20:28:07
  */
 
 import { Params } from './ask'
-import { wait } from './helper'
+import { wait } from '../utils/helper'
 
-type ScheduleData = {
-  params: Params
-  /** 优先级 */
-  priority: number
-}
+export type ScheduleData = Params
 
 type SubscribeMethod = (scheduleData: ScheduleData) => void
 type CompleteCallback = (mapData: Map<string, ScheduleData>) => void
@@ -62,18 +58,19 @@ class Schedule {
    * @param {Params} params
    * @param {number} priority 优先级
    */
-  queue(params: Params, priority: number = 1) {
-    this.mapData.set(params.url, {
-      priority,
-      params
-    })
+  queue(params: Params) {
+    if (!Reflect.has(params, 'priority')) {
+      params.priority = 1
+    }
+    this.mapData.set(params.url, params)
   }
+
   /**
    * 发布计划
    * @param {ScheduleData} scheduleData
    */
   schedule(scheduleData: ScheduleData) {
-    const url = scheduleData.params.url
+    const url = scheduleData.url
     this.alreadyLoadMapData.set(url, scheduleData)
     this.mapData.delete(url)
     this.subscribe?.(scheduleData)
@@ -112,6 +109,7 @@ class Schedule {
     }
     return maxData
   }
+
   /**
    * @param  {any} startId?
    */

@@ -1,5 +1,5 @@
 import { wait } from '@/utils/helper'
-import Schedule from '@/utils/Schedule'
+import Schedule from '@/core/Schedule'
 
 describe('调度器测试：', () => {
   test('调度器的优先级测试：', () =>
@@ -17,7 +17,7 @@ describe('调度器测试：', () => {
           } catch (e) {
             reject(e)
           }
-          schedule.complete(data.params)
+          schedule.complete(data)
         },
         async (data) => {
           schedule.stop()
@@ -35,10 +35,10 @@ describe('调度器测试：', () => {
       )
 
       // 添加调度任务
-      schedule.queue({ url: '1' }, 1)
-      schedule.queue({ url: '2' }, 2)
-      schedule.queue({ url: '7' }, 7)
-      schedule.queue({ url: '4' }, 4)
-      schedule.queue({ url: '5' }, 5)
+      schedule.queue({ url: '1', priority: 1 })
+      schedule.queue({ url: '2', priority: 2 })
+      schedule.queue({ url: '7', priority: 7 })
+      schedule.queue({ url: '4', priority: 4 })
+      schedule.queue({ url: '5', priority: 5 })
     }))
 })
