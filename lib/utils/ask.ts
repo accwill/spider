@@ -1,3 +1,10 @@
+/**
+ * 下载器
+ * @Author: aceh
+ * @Date: 2021-09-11 20:10:33
+ * @Last Modified by: aceh
+ * @Last Modified time: 2021-09-12 10:10:00
+ */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ReconnectCount, ReconnectionTime, Status } from '../constants'
 import { wait } from './helper'
@@ -22,7 +29,7 @@ const mapTypeConfig = {
     responseType: 'json'
   }
 }
-type Params = {
+export type Params = {
   /** 请求url */
   url: string
   /** 失败重试次数 */
@@ -35,7 +42,7 @@ type Params = {
 /**
  * 请求类
  * 1. 错误重连，可设置次数
- * 2. TODO: 请求解析中间件设置, Cancel方法
+ * 2. TODO: 请求解析中间件设置
  */
 export class Ask {
   /**
@@ -61,16 +68,17 @@ export class Ask {
     }
   }
   resCtx: Promise<AxiosResponse<any>>
-  /** 请求状态 */
-  status: Status = Status.Normal
   /** 结果 */
   response: AxiosResponse<any> = null
+  /** 请求状态 */
+  status: Status = Status.Normal
   /** 可以失败重连的次数 */
   reconnectCount = ReconnectCount
   /** 请求次数 */
   requestCount = 0
   /** 错误对象 */
   error: Error = null
+  /** 用于取消请求 */
   _cancelToken = axios.CancelToken.source()
   config: Params | null = null
   /**

@@ -1,6 +1,5 @@
-// import ask from './utils/request';
 /**
- * asldfj
+ * 中心交互
  */
 type ConstructorParams = {
   url: string
@@ -10,9 +9,7 @@ type ConstructorParams = {
 /**
  * 爬虫类
  */
-class Scrappy {
-  maxConnection: number = 5
-  maxPage: number = 1
+class Engine {
   params: ConstructorParams
   /**
    * 构造函数
@@ -23,4 +20,4 @@ class Scrappy {
   }
 }
 
-export default Scrappy
+export default Engine

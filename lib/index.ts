@@ -1,8 +1,38 @@
-import { Ask } from './utils/ask'
+import Schedule from './utils/Schedule'
+// let count = 5
+// const schedule = new Schedule(
+//   (data) => {
+//     count--
+//     setTimeout(() => {
+//       console.log('schedule', schedule)
+//       schedule.complete(data.params)
+//     }, 200)
+//   },
+//   (data) => {
+//     console.log('complete', schedule)
+//     schedule.stop()
+//   }
+// )
 
-const ask = new Ask({ url: 'http://www.baidu.com', reconnectCount: 2 })
+// schedule.queue({ url: '1' }, 1)
+// schedule.queue({ url: '2' }, 7)
+// schedule.queue({ url: '3' }, 3)
+// schedule.queue({ url: '4' }, 4)
 
-ask.start()
-ask.cancel()
-await ask.resCtx
-console.log('ask', ask)
+// let count = 5
+// const schedule = new Schedule(
+//   (data) => {
+//     count--
+//     console.log('schedule', schedule)
+//     schedule.complete(data.params)
+//   },
+//   (data) => {
+//     console.log('complete', schedule)
+//     schedule.stop()
+//   }
+// )
+
+// schedule.queue({ url: '1' }, 1)
+// schedule.queue({ url: '2' }, 2)
+// schedule.queue({ url: '3' }, 3)
+// schedule.queue({ url: '4' }, 4)
