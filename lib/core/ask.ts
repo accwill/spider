@@ -1,7 +1,14 @@
+/**
+ * 下载器
+ * @Author: aceh
+ * @Date: 2021-09-11 20:10:33
+ * @Last Modified by: aceh
+ * @Last Modified time: 2021-09-12 18:59:39
+ */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ReconnectCount, ReconnectionTime, Status } from '../constants'
-import { wait } from './helper'
-import request, { getUserAgent } from './request'
+import { wait } from '../utils/helper'
+import request, { getUserAgent } from '../utils/request'
 
 /** 请求类型 */
 export enum Type {
@@ -17,25 +24,31 @@ const mapTypeConfig = {
   [Type.File]: {
     responseType: 'stream'
   },
-  [Type.Text]: {},
+  [Type.Text]: {
+    responseType: 'text/html; charset=utf-8'
+  },
   [Type.JSON]: {
     responseType: 'json'
   }
 }
-type Params = {
+export type Params = {
   /** 请求url */
   url: string
   /** 失败重试次数 */
   reconnectCount?: number
   /** 类型 */
   type?: Type
+  /** 爬虫名字 */
+  spiderName?: string
+  /** 优先权, 默认为1， 值越大，越有限 */
+  priority?: number
   onError?: (error: Error, config: Params) => void
 } & AxiosRequestConfig
 
 /**
  * 请求类
  * 1. 错误重连，可设置次数
- * 2. TODO: 请求解析中间件设置, Cancel方法
+ * 2. TODO: 请求解析中间件设置
  */
 export class Ask {
   /**
@@ -61,16 +74,17 @@ export class Ask {
     }
   }
   resCtx: Promise<AxiosResponse<any>>
-  /** 请求状态 */
-  status: Status = Status.Normal
   /** 结果 */
   response: AxiosResponse<any> = null
+  /** 请求状态 */
+  status: Status = Status.Normal
   /** 可以失败重连的次数 */
   reconnectCount = ReconnectCount
   /** 请求次数 */
   requestCount = 0
   /** 错误对象 */
   error: Error = null
+  /** 用于取消请求 */
   _cancelToken = axios.CancelToken.source()
   config: Params | null = null
   /**
@@ -91,11 +105,14 @@ export class Ask {
     if (type in Type) {
       mapConfig = mapTypeConfig[type]
     }
+    if (!mapConfig) {
+      mapConfig = mapTypeConfig[Type.Text]
+    }
     try {
       this.requestCount += 1
       this.status = Status.Loading
       const response = await request({
-        url: encodeURI(url),
+        url: url,
         headers: getUserAgent(),
         ...mapConfig,
         ...rest,

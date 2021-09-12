@@ -7,6 +7,8 @@ export enum DataType {
 export const ReconnectionTime = 1000
 /** 默认失败请求重复次数 */
 export const ReconnectCount = 5
+/** 最大同时调度多少任务 */
+export const maxConnect = 0
 
 /** 请求状态 */
 export enum Status {

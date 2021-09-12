@@ -1,5 +1,5 @@
 import { ReconnectCount, Status } from '@/constants'
-import ask, { Ask, Type } from '@/utils/ask'
+import ask, { Ask, Type } from '@/core/ask'
 import { isString } from '@/utils/helper'
 
 it('ask测试, 失败请求次数', async () => {
