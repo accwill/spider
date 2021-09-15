@@ -2,16 +2,20 @@
  * @Author: aceh
  * @Date: 2021-09-11 20:35:21
  * @Last Modified by: aceh
- * @Last Modified time: 2021-09-12 20:28:07
+ * @Last Modified time: 2021-09-15 21:53:28
  */
 
+import * as fs from 'fs'
+import * as path from 'path'
 import { Params } from './ask'
 import { wait } from '../utils/helper'
+import { ConfigPath, MaxConnect } from '../constants'
 
 export type ScheduleData = Params
 
 type SubscribeMethod = (scheduleData: ScheduleData) => void
 type CompleteCallback = (mapData: Map<string, ScheduleData>) => void
+
 /**
  * 调度器方法
  *  1. 支持优先级调度，优先级大的优先调度
@@ -29,6 +33,10 @@ class Schedule {
   /** 是否暂停 */
   isPause: boolean = false
 
+  // 最大任务数
+  maxSchedule: number
+
+  // 当前执行的ID
   currentStartId?: any = +new Date()
   /**
    * 监听调度方法
@@ -51,8 +59,33 @@ class Schedule {
     this.completeCallback = complete
     this.subscribe = subscribe
     this.start()
+    this.maxSchedule = MaxConnect
+    this.readConfig()
   }
 
+  /**
+   * 读取配置文件
+   * @memberof Schedule
+   */
+  readConfig() {
+    const data = fs.readFileSync(ConfigPath, { encoding: 'utf-8' })
+    try {
+      const config = JSON.parse(data)
+      // 读取配置文件
+      this.maxSchedule = config.maxConnect || MaxConnect
+    } catch (e) {
+      console.log('配置文件未找到')
+    }
+  }
+
+  /**
+   *
+   * 监听配置配置文件更新
+   * @memberof Schedule
+   */
+  watchFile() {
+    fs.watchFile(ConfigPath, { interval: 2000 }, this.readConfig)
+  }
   /**
    * 添加追加
    * @param {Params} params
@@ -115,11 +148,12 @@ class Schedule {
    */
   async start(startId?: any) {
     let waitTime = 300
-    if (this.mapData.size >= 1) {
+    if (this.mapData.size >= 1 && this.alreadyLoadMapData.size <= this.maxSchedule) {
       const scheduleData = this.getMaxPriority()
       this.schedule(scheduleData)
       waitTime = 100
     }
+    // TODO: 这里的逻辑需要修改
     this.currentStartId = startId
     await wait(waitTime)
     if (this.currentStartId !== startId || this.isPause) {

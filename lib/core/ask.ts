@@ -3,7 +3,7 @@
  * @Author: aceh
  * @Date: 2021-09-11 20:10:33
  * @Last Modified by: aceh
- * @Last Modified time: 2021-09-12 18:59:39
+ * @Last Modified time: 2021-09-14 20:45:54
  */
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ReconnectCount, ReconnectionTime, Status } from '../constants'
@@ -42,6 +42,8 @@ export type Params = {
   spiderName?: string
   /** 优先权, 默认为1， 值越大，越有限 */
   priority?: number
+  /** 携带数据存储 */
+  otherData?: any
   onError?: (error: Error, config: Params) => void
 } & AxiosRequestConfig
 
