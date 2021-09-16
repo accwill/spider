@@ -1,3 +1,4 @@
+import path from 'path'
 /** 数据类型 */
 export enum DataType {
   String = '[object String]'
@@ -8,7 +9,11 @@ export const ReconnectionTime = 1000
 /** 默认失败请求重复次数 */
 export const ReconnectCount = 5
 /** 最大同时调度多少任务 */
-export const maxConnect = 0
+export const MaxConnect = 20
+
+export const ConfigFileName = '.spider.json'
+// 配置文件路径
+export const ConfigPath = path.resolve(path.dirname(''), ConfigFileName)
 
 /** 请求状态 */
 export enum Status {

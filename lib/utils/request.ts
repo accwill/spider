@@ -1,5 +1,5 @@
 import axios from 'axios'
-import * as randomAgent from 'random-useragent'
+// import * as randomAgent from 'random-useragent'
 
 const request = axios.create({
   timeout: 6000,
@@ -14,6 +14,8 @@ const request = axios.create({
  * 获取随机user-agent
  * @return {any}
  */
-export const getUserAgent = () => ({ 'User-Agent': randomAgent.getRandom() })
+export const getUserAgent = () => ({
+  // 'User-Agent': randomAgent.getRandom((ua) => ua.deviceType !== 'mobile' && ua.osName !== 'Linux')
+})
 
 export default request
